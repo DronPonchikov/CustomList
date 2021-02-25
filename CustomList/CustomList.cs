@@ -87,7 +87,7 @@ namespace CustomList
             {               
                 if (index < 0 || index > Count)
                 {
-                    throw new IndexOutOfRangeException("Index is not approproate");
+                    throw new IndexOutOfRangeException();
                 }
 
                 Item<T> current = Head;
@@ -104,7 +104,7 @@ namespace CustomList
             {               
                 if (index < 0 || index > Count)
                 {
-                    throw new IndexOutOfRangeException("Index is not approproate");
+                    throw new IndexOutOfRangeException();
                 }
                 Item<T> current = Head;
                 for (int i = 0; i < index; i++)
