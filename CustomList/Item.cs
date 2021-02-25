@@ -8,9 +8,10 @@ namespace CustomList
     {
         public T Data { get; set; }
         public Item<T> Next { get; set; }
+
         public Item(T data)
         {
-            throw new NotImplementedException();
+            Data=data;
         }
 
     }

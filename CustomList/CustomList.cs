@@ -6,21 +6,32 @@ namespace CustomList
 {
     public class CustomList<T> : IList<T>
     {
+        public Item <T> item;
         /// <summary>
         /// The property return first element of list 
         /// </summary>
         public Item<T> Head
         {
-            get => throw new NotImplementedException();
+            get;
+
+            private set;
         }
+        public Item<T> Tail
+        {
+            get;
+
+            private set;
+        }
+
 
         /// <summary>
         /// The property return number of elements contained in the CustomList
         /// </summary>
         public int Count
         {
-            get => throw new NotImplementedException();
-            private set => throw new NotImplementedException();
+            get;
+
+            private set;
         }
 
         /// <summary>
@@ -37,7 +48,14 @@ namespace CustomList
         /// <param name="values"></param>
         public CustomList(params T[] values)
         {
-            throw new NotImplementedException();
+            if (values==null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+            foreach (var item in values)
+            {
+                this.Add(item);
+            }
         }
 
 
@@ -48,7 +66,14 @@ namespace CustomList
         /// <param name="values"></param>
         public CustomList(IEnumerable<T> values)
         {
-            throw new NotImplementedException();
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
+            foreach (var item in values)
+            {
+                this.Add(item);
+            }
         }
 
         /// <summary>
@@ -59,12 +84,37 @@ namespace CustomList
         public T this[int index]
         {
             get
-            {
-                throw new NotImplementedException();
+            {               
+                if (index < 0 || index > Count)
+                {
+                    throw new IndexOutOfRangeException(nameof(index));
+                }
+
+                Item<T> current = Head;
+                for (int i = 0; i < index; i++)
+                {
+                    
+                        current = current.Next;
+                   
+
+                }
+                return current.Data;
             }
             set
-            {
-                throw new NotImplementedException();
+            {               
+                if (index < 0 || index > Count)
+                {
+                    throw new IndexOutOfRangeException(nameof(index));
+                }
+                Item<T> current = Head;
+                for (int i = 0; i < index; i++)
+                {
+                   
+                        current = current.Next;
+                                      
+
+                }
+                 current.Data=value;
             }
         }
 
@@ -76,7 +126,17 @@ namespace CustomList
         /// <exception cref="ArgumentNullException">Throws when you try to add null</exception>
         public void Add(T data)
         {
-            throw new NotImplementedException();
+            item = new Item<T>(data);
+            if (Head==null)
+            {
+                Head = item;
+            }
+            else
+            {
+                Tail.Next = item;
+            }
+            Tail = item;
+            Count++;
         }
 
 
@@ -85,7 +145,10 @@ namespace CustomList
         /// </summary>
         public void Clear()
         {
-            throw new NotImplementedException();
+            foreach (var item in this)
+            {
+                this.Remove(item);
+            }
         }
 
         /// <summary>
@@ -95,7 +158,20 @@ namespace CustomList
         /// <returns>True if the element exists in the CustomList, else false</returns>
         public bool Contains(T item)
         {
-            throw new NotImplementedException();
+            Item<T> current = Head;
+            for (int i = 0; i < Count; i++)
+            {
+                if (current.Data.Equals(item))
+                {
+                    return true;
+                    
+                }
+                current = current.Next;
+
+            }
+
+           
+            return false;
         }
 
 
@@ -108,7 +184,38 @@ namespace CustomList
         /// <exception cref="ArgumentNullException">Throws when you try to remove null</exception>
         public bool Remove(T item)
         {
-            throw new NotImplementedException();
+            if (item==null)
+            {
+                throw new ArgumentNullException(nameof(item), "Item is null");
+            }
+            Item<T> current = Head;
+            Item<T> previous = null;
+
+            while (current != null)
+            {
+                if (current.Data.Equals(item))
+                {
+                    
+                    if (previous != null)
+                    {
+                        previous.Next = current.Next;
+                        if (current.Next == null)
+                            Tail = previous;
+                    }
+                    else
+                    {
+                        Head = Head.Next;
+
+                        if (Head == null)
+                            Tail = null;
+                    }
+                    Count--;
+                    return true;
+                }
+                previous = current;
+                current = current.Next;
+            }
+            return false;
         }
 
 
@@ -121,7 +228,21 @@ namespace CustomList
         ///    if found; otherwise, -1.</returns>
         public int IndexOf(T item)
         {
-            throw new NotImplementedException();
+            Item<T> current = Head;
+
+            int index=-1;
+            
+            for (int i = 0; i < Count; i++)
+            {               
+                if (current.Data.Equals(item))
+                {
+                    index = i;
+                    break;
+                    
+                }
+                current = current.Next;
+            }
+            return index;
         }
 
 
@@ -134,7 +255,39 @@ namespace CustomList
         /// <exception cref="ArgumentNullException">Thrown when item is null</exception>
         public void Insert(int index, T item)
         {
-            throw new NotImplementedException();
+            if (item==null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+            if (index < 0 || index > Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+
+            
+            Item<T> current = Head;
+            Item<T> insertedItem = new Item<T>(item);
+            Item<T> nextSeq = null;
+            if (index == 0)
+            {
+                current.Next = Head;
+                current.Data = item;
+            }
+           
+            for (int i = 0; i < index-1; i++)
+            {
+                   current = current.Next;
+                
+            }
+            nextSeq = current.Next;
+            current.Next = insertedItem;
+            insertedItem.Next = nextSeq;
+
+                Count++;
+
+            
+
+            
         }
 
 
@@ -145,7 +298,11 @@ namespace CustomList
         /// <exception cref="ArgumentOutOfRangeException">Throw when index is less than 0 or greater than Count - 1</exception>
         public void RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            if (index < 0 || index > Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index));
+            }
+            Remove(this[index]);
         }
 
 
@@ -161,7 +318,21 @@ namespace CustomList
         ///    than the number of elements that the destination array can contain</exception>
         public void CopyTo(T[] array, int arrayIndex)
         {
-            throw new NotImplementedException();
+            if (array==null)
+            {
+                throw new ArgumentNullException(nameof(array), "Array is null");
+            }
+            if (Count>array.Length)
+            {
+                throw new ArgumentException(nameof(array), "Array has small size");
+
+            }
+            int num = 0;
+            for (int i = arrayIndex; i < Count; i++)
+            {
+                array[i] = this[num];
+                num++;
+            }
         }
 
 
@@ -171,12 +342,17 @@ namespace CustomList
         /// <returns></returns>
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            Item<T> current = Head;
+            while (current != null)
+            {
+                yield return current.Data;
+                current = current.Next;
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return this.GetEnumerator();
         }
 
        
