@@ -126,6 +126,10 @@ namespace CustomList
         /// <exception cref="ArgumentNullException">Throws when you try to add null</exception>
         public void Add(T item)
         {
+            if (item==null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
             items = new Item<T>(item);
             if (Head==null)
             {
