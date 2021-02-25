@@ -4,9 +4,9 @@ using System.Collections.Generic;
 
 namespace CustomList
 {
-    public class CustomList<T> : IList<T>
+    public  class CustomList<T> : IList<T>
     {
-        public Item <T> item;
+        private Item <T> items;
         /// <summary>
         /// The property return first element of list 
         /// </summary>
@@ -52,9 +52,9 @@ namespace CustomList
             {
                 throw new ArgumentNullException(nameof(values));
             }
-            foreach (var item in values)
+            foreach (var i in values)
             {
-                this.Add(item);
+                this.Add(i);
             }
         }
 
@@ -70,9 +70,9 @@ namespace CustomList
             {
                 throw new ArgumentNullException(nameof(values));
             }
-            foreach (var item in values)
+            foreach (var i in values)
             {
-                this.Add(item);
+                this.Add(i);
             }
         }
 
@@ -87,7 +87,7 @@ namespace CustomList
             {               
                 if (index < 0 || index > Count)
                 {
-                    throw new IndexOutOfRangeException(nameof(index));
+                    throw new IndexOutOfRangeException("Index is not approproate");
                 }
 
                 Item<T> current = Head;
@@ -104,7 +104,7 @@ namespace CustomList
             {               
                 if (index < 0 || index > Count)
                 {
-                    throw new IndexOutOfRangeException(nameof(index));
+                    throw new IndexOutOfRangeException("Index is not approproate");
                 }
                 Item<T> current = Head;
                 for (int i = 0; i < index; i++)
@@ -124,18 +124,18 @@ namespace CustomList
         /// </summary>
         /// <param name="data">Object that should be added in the CustomList</param>
         /// <exception cref="ArgumentNullException">Throws when you try to add null</exception>
-        public void Add(T data)
+        public void Add(T item)
         {
-            item = new Item<T>(data);
+            items = new Item<T>(item);
             if (Head==null)
             {
-                Head = item;
+                Head = items;
             }
             else
             {
-                Tail.Next = item;
+                Tail.Next = items;
             }
-            Tail = item;
+            Tail = items;
             Count++;
         }
 
@@ -145,9 +145,9 @@ namespace CustomList
         /// </summary>
         public void Clear()
         {
-            foreach (var item in this)
+            foreach (var i in this)
             {
-                this.Remove(item);
+                this.Remove(i);
             }
         }
 
@@ -324,7 +324,7 @@ namespace CustomList
             }
             if (Count>array.Length)
             {
-                throw new ArgumentException(nameof(array), "Array has small size");
+                throw new ArgumentException("Array is too short", nameof(array));
 
             }
             int num = 0;
